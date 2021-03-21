@@ -48,7 +48,7 @@ jobs:
           git config --global user.email "oscdah@student.chalmers.se"
           git config --global user.name "Robot Wilux"
           git add assets/*/perm.json
-          git commit -m "auto commit" 
+          git commit -m "auto commit v0.0.${{ github.run_number }}" 
           git push
            
       - name: Create Release
