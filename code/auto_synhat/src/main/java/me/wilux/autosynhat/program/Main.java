@@ -1,6 +1,5 @@
 package me.wilux.autosynhat.program;
 
-import me.wilux.autosynhat.program.logger.LogWindow;
 import me.wilux.autosynhat.program.logger.WindowHandler;
 
 import javax.swing.*;
@@ -20,7 +19,7 @@ public class Main {
     public static PermaFile propertyFile;
 
     public static WindowHandler windowHandler = null;
-    private Logger logger = null;
+    public static Logger logger = null;
 
     public static void main(String[] args) {
 
@@ -37,31 +36,31 @@ public class Main {
         }
 
         windowHandler = WindowHandler.getInstance();
-        windowHandler.publish(new LogRecord(Level.INFO, "AutoSynhat Starting with Args ="+ String.join(" ",args)));
+        windowHandler.publishString("AutoSynhat Starting with Args ="+ String.join(" ",args));
         if(!startedByAgent){
-            windowHandler.publish(new LogRecord(Level.INFO, "AutoSynhat Started Directly"));
+            windowHandler.publishString("AutoSynhat Started Directly");
         }
 
 
         try {
             propertyFile = new PermaFile(FileConsts.permanentStorageFile);
         } catch (IOException e) {
-            windowHandler.publish(LogWindow.logError(Level.WARNING,"Can not read property file", e));
+            windowHandler.publish(new LogRecord(Level.WARNING,"Can not read property file"+e));
             exitSevere(e);
         }
 
         try {
             if (GithubDownloader.isOutdated()) {
-                windowHandler.publishInfo("A new version is available, downloading automatically");
+                windowHandler.publishString("A new version is available, downloading automatically");
                 String versionName = GithubDownloader.downloadLatestZip();
                 GithubDownloader.unzip();
-                windowHandler.publishInfo(versionName+" Downloaded Successfully");
+                windowHandler.publishString(versionName+" Downloaded Successfully");
                 exitDownloadSuccess();
             } else {
                 exitNoUpdate();
             }
         } catch (IOException e) {
-            windowHandler.publish(LogWindow.logError(Level.WARNING,"Unable to access github", e));
+            windowHandler.publish(new LogRecord(Level.WARNING,"Unable to access github"+e));
             exitCantDownload();
         }
     }
@@ -80,7 +79,7 @@ public class Main {
     }
 
     public static void exitNoUpdate() {
-        windowHandler.publishInfo("No updated needed, this window will close in 3 seconds");
+        windowHandler.publishString("No updated needed, this window will close in 3 seconds");
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {e.printStackTrace();}

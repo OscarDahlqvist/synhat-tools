@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class GithubDownloader {
     public static boolean isOutdated() throws IOException {
-        Main.windowHandler.publishInfo("Trying to access github");
+        Main.windowHandler.publishString("Trying to access github");
 
         GitHub github = GitHub.connectAnonymously();
         if(github.getRateLimit().getRemaining() < 2){
@@ -25,11 +25,12 @@ public class GithubDownloader {
         }
 
         github.checkApiUrlValidity();
-        GHRepository repo = github.getRepository("OscarDahlqvist/synhat");
+        GHRepository repo = github.getRepository("wiluxgit/synhat");
         GHRelease latestRelease = repo.getLatestRelease();
+        if(latestRelease == null) throw new ConnectException("UNABLE TO DOWNLOAD, This repo has no releases");
         String latestReleaseName = latestRelease.getName();
 
-        Main.windowHandler.publishInfo("Looking for new releases");
+        Main.windowHandler.publishString("Looking for new releases");
 
         String installedReleaseName = Main.propertyFile.content.get(PermaFile.installedPackName).getAsString();
 
@@ -41,13 +42,13 @@ public class GithubDownloader {
         FileConsts.outputDir.mkdirs();
 
         GitHub github = GitHub.connectAnonymously();
-        GHRepository repo = github.getRepository("OscarDahlqvist/synhat");
+        GHRepository repo = github.getRepository("wiluxgit/synhat");
         GHRelease latestRelease = repo.getLatestRelease();
         String latestReleaseName = latestRelease.getName();
 
         String latestReleaseUrl = latestRelease.getAssetsUrl();
 
-        Main.windowHandler.publishInfo(latestReleaseUrl);
+        Main.windowHandler.publishString(latestReleaseUrl);
 
         JsonParser jsonParser = new JsonParser();
         String releaseApiString = downloadStringFromURL(latestReleaseUrl);

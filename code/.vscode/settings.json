@@ -1,0 +1,16 @@
+{
+    "settings": {
+        "files.exclude": {
+            "**/.git": true,         // this is a default value
+            "**/.DS_Store": true,    // this is a default value
+
+            "**/auto_synhat": true,
+            "auto_synhat": true
+        }
+    },
+    "files.exclude": {
+        "**/auto_synhat": true,
+        "**/__pycache__": true
+    },
+    "terminal.integrated.cwd": "${fileDirname}"
+}
