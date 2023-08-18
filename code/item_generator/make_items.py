@@ -1,7 +1,7 @@
 import json
 import re 
 
-def run(path = "C:/Users/Ananas/AppData/Roaming/.minecraft/resourcepacks/synhat-dev/.github/workflows/scripts/__master_models_table.json"):
+def run(path = "C:/Users/wilux/AppData/Roaming/.minecraft/resourcepacks/synhat-dev/.github/workflows/scripts/__master_models_table.json"):
     with open(path) as f:
         hatList = json.load(f)["models"]
 
@@ -45,7 +45,7 @@ def makeMegaChest(categoryStr, itemList):
         return makeChest(categoryStr, itemList)
 
     subChests = [makeChest(categoryStr, ilc) for ilc in chunk(itemList, 27)]
-    return makeChest(categoryStr, subChests)
+    return makeMegaChest(categoryStr, subChests)
 
 def makeChest(categoryStr, itemList):
     if len(itemList) > 27: raise Exception("Chest can not contain more than 27 items")
@@ -95,6 +95,12 @@ def makeItem(hd):
             "CustomModelData":cmData
         }
     }
+
+    if "nbt" in hd:
+        extraNbt = hd["nbt"]
+        item["tag"] = item["tag"] | extraNbt
+        #print(item, "\n")
+
     return item
 
 if __name__ == '__main__':
